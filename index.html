@@ -149,19 +149,6 @@
   .sim-row.investor-share .value { color: var(--green); font-weight: 800; font-size: 1.15rem; }
 
   /* ===== CHART ===== */
-  .chart-section { background: var(--white); }
-  .chart-container { margin-top: 2.5rem; background: var(--green-bg); border: 1px solid rgba(0,0,0,0.06); border-radius: 20px; padding: 2.5rem; }
-  .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 280px; padding: 1rem 0; }
-  .bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
-  .bar { width: 100%; max-width: 40px; border-radius: 6px 6px 0 0; transition: all 0.6s ease; position: relative; }
-  .bar.negative { border-radius: 0 0 6px 6px; }
-  .bar-label { font-size: 0.65rem; color: var(--font-light); text-align: center; }
-  .bar-value { font-size: 0.6rem; color: var(--font-dark); text-align: center; font-weight: 600; }
-  .chart-legend { display: flex; justify-content: center; gap: 2rem; margin-top: 1.5rem; }
-  .chart-legend .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: var(--font-light); }
-  .chart-legend .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
-  .chart-note { text-align: center; font-size: 0.75rem; color: var(--font-light); margin-top: 1rem; font-style: italic; }
-
   /* ===== MARKETING ===== */
   .marketing { background: var(--green-bg); }
   .marketing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
@@ -236,7 +223,6 @@
     <li><a href="#masalah">Masalah</a></li>
     <li><a href="#solusi">Model RRS</a></li>
     <li><a href="#paket">Paket</a></li>
-    <li><a href="#simulasi">Simulasi</a></li>
     <li><a href="#marketing">Marketing</a></li>
     <li><a href="#faq">FAQ</a></li>
   </ul>
@@ -410,23 +396,6 @@
   </div>
 </section>
 
-<!-- CHART -->
-<section class="slide chart-section" id="chart">
-  <div class="slide-content">
-    <span class="section-label fade-up">Visualisasi</span>
-    <h2 class="section-title fade-up">Akumulasi Profit Investor<br>(Paket Mini Café — Rp500 jt)</h2>
-    <div class="chart-container fade-up">
-      <div class="bar-chart" id="barChart"></div>
-      <div class="chart-legend">
-        <div class="legend-item"><div class="legend-dot" style="background:var(--red);"></div><span>Belum BEP</span></div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div><span>Profit Investor</span></div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--brown);"></div><span>Modal Awal</span></div>
-      </div>
-      <p class="chart-note">* BEP diperkirakan pada bulan ke-12-15. Grafik menggunakan skema 65% dari net profit.</p>
-    </div>
-  </div>
-</section>
-
 <!-- MARKETING -->
 <section class="slide marketing" id="marketing">
   <div class="slide-content">
@@ -518,33 +487,7 @@
   function toggleNav() { document.getElementById('navLinks').classList.toggle('active'); }
   document.querySelectorAll('.nav-links a').forEach(link => { link.addEventListener('click', () => { document.getElementById('navLinks').classList.remove('active'); }); });
 
-  function renderChart() {
-    const container = document.getElementById('barChart');
-    if (!container) return;
-    const modal = -50;
-    const monthlyProfit = 31.2;
-    const months = 24;
-    let cumulative = modal;
-    let html = '';
-    for (let i = 0; i <= months; i++) {
-      let height, color, value;
-      if (i === 0) { height = 20; color = 'var(--brown)'; value = 'Modal'; }
-      else {
-        cumulative += monthlyProfit;
-        const normalizedHeight = Math.max(0, (cumulative / 300) * 200);
-        height = Math.max(4, normalizedHeight);
-        if (cumulative < 0) { color = '#c0392b'; value = Math.round(cumulative); }
-        else { color = 'var(--green)'; value = '+' + Math.round(cumulative); }
-      }
-      html += `<div class="bar-group"><div class="bar-value" style="font-size:0.55rem; ${i % 3 !== 0 && i !== 0 ? 'opacity:0' : ''}">${i === 0 ? '' : value}</div><div class="bar ${cumulative < 0 && i > 0 ? 'negative' : ''}" style="height:${height}px; background:${color};"></div><div class="bar-label">${i === 0 ? 'Awal' : i % 3 === 0 ? 'B' + i : ''}</div></div>`;
-    }
-    container.innerHTML = html;
-  }
-  const chartObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => { if (entry.isIntersecting) { renderChart(); chartObserver.disconnect(); } });
-  }, { threshold: 0.3 });
-  const chartSection = document.getElementById('chart');
-  if (chartSection) chartObserver.observe(chartSection);
+
 </script>
 </body>
 </html>
